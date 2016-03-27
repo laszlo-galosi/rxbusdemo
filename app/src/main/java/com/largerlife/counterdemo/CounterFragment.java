@@ -132,14 +132,16 @@ public class CounterFragment extends BaseFragment {
 
     @Override protected void loadStateArguments() {
         super.loadStateArguments();
-        mCounter.set(getArguments().getInt(ARG_COUNTER_VALUE, 0));
+        mCounter.set(getArguments().getLong(ARG_COUNTER_VALUE, 0L));
         mCounterView.setText(String.format("%d", mCounter.intValue()));
         handleCounterIdlingState(getArguments().getInt(ARG_COUNTER_STATE, RxBus.RESTART_COUNTER));
     }
 
     @Override protected void saveStateArguments() {
-        getArguments().putInt(ARG_COUNTER_STATE, mCounterState);
-        getArguments().putInt(ARG_COUNTER_VALUE, Integer.valueOf(mCounter.intValue()));
+        getArguments().putInt(ARG_COUNTER_STATE, mCounterState == RxBus.RESTART_COUNTER
+                                                 ? RxBus.RESUME_COUNTER
+                                                 : mCounterState);
+        getArguments().putLong(ARG_COUNTER_VALUE, Integer.valueOf(mCounter.intValue()));
         super.saveStateArguments();
     }
 
@@ -151,7 +153,7 @@ public class CounterFragment extends BaseFragment {
         mCounterState = state;
         switch (mCounterState) {
             case RxBus.RESTART_COUNTER:
-                mCounter.set(0);
+                mCounter.set(0L);
                 executeCounting();
                 break;
             case RxBus.RESUME_COUNTER:

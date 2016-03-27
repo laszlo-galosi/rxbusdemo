@@ -74,9 +74,9 @@ public abstract class BaseFragment extends Fragment {
 
     @CallSuper
     @Override public void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
         Log.v(getFragmentTag(), "onSaveInstanceState")
            .v("outState", outState).v("arguments", getArguments());
+        super.onSaveInstanceState(outState);
     }
 
     @CallSuper

@@ -6,9 +6,9 @@
 
   <ImageView
       android:id="@+id/imageView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_gravity="center|center_vertical"
+      android:layout_width="@dimen/home_image_width"
+      android:layout_height="@dimen/home_image_width"
+      android:layout_gravity="center"
       android:scaleType="centerInside"
       android:src="@drawable/androiddev_meme"
   />

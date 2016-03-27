@@ -1,5 +1,5 @@
-RxBus Demo
-==========
+RxBus Counter Demo
+==================
 A simple material designed Android app, using [RxBus event bus concept](http://nerds.weddingpartyapp.com/tech/2014/12/24/implementing-an-event-bus-with-rxjava-rxbus/) 
 for communicating between various UI components.
 

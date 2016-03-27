@@ -38,14 +38,14 @@ public class HomeFragment extends BaseFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(Bundle bundle) {
-        HomeFragment galleryFragment = new HomeFragment();
+        HomeFragment homeFragment = new HomeFragment();
         Log.w("newInstance ", bundle);
         if (bundle != null) {
-            galleryFragment.setArguments(bundle);
+            homeFragment.setArguments(bundle);
         } else {
-            galleryFragment.setArguments(new Bundle());
+            homeFragment.setArguments(new Bundle());
         }
-        return galleryFragment;
+        return homeFragment;
     }
 
     public HomeFragment() {
@@ -74,6 +74,8 @@ public class HomeFragment extends BaseFragment {
         picasso.load(imageToLoadRes)
                .error(DEFAULT_STATIC_IMAGE)
                .placeholder(R.mipmap.ic_launcher)
+               .centerInside()
+               .resizeDimen(R.dimen.home_image_width, R.dimen.home_image_width)
                .into(mImageView);
     }
 

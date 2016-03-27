@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.fab) FloatingActionButton mFabButton;
     private Subscriber<Bundle> mEventSubscriber;
     private Bundle mMainBundle;
+    private String mCurrentFragmentTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         String ttitle = getResources().getString(R.string.main_toolbar_title);
         setSupportActionBar(mToolbar);
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         }
         //if no saved state storing the default fragment tag, and initializing the activity.
         if (savedInstanceState == null) {
-            mMainBundle.putString(ARG_CURRENT_FRAGMENT_TAG, HomeFragment.TAG);
+            mCurrentFragmentTag = HomeFragment.TAG;
             onRestoreInstanceState(mMainBundle);
         }
     }
@@ -87,11 +88,11 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * saving all the previously stored argument to a saved instance.
-     * @param outState
      */
     @Override protected void onSaveInstanceState(Bundle outState) {
         Log.d("onSaveInstanceState").v(mMainBundle);
         outState.putAll(mMainBundle);
+        outState.putString(ARG_CURRENT_FRAGMENT_TAG, mCurrentFragmentTag);
         super.onSaveInstanceState(outState);
     }
 
@@ -103,16 +104,15 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Restores the previously saved and active fragment from the savedInstanceState bundle.
-     * @param savedInstanceState
      */
     @Override protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         Log.d("onRestoreInstanceState").v(savedInstanceState);
         super.onRestoreInstanceState(savedInstanceState);
-        String currentFragmentTag =
+        mCurrentFragmentTag =
               savedInstanceState.getString(ARG_CURRENT_FRAGMENT_TAG, HomeFragment.TAG);
-        if (currentFragmentTag.equals(HomeFragment.TAG)) {
+        if (mCurrentFragmentTag.equals(HomeFragment.TAG)) {
             addOrReplaceFragment(savedInstanceState, HomeFragment.newInstance(savedInstanceState));
-        } else if (currentFragmentTag.equals(CounterFragment.TAG)) {
+        } else if (mCurrentFragmentTag.equals(CounterFragment.TAG)) {
             addOrReplaceFragment(savedInstanceState,
                                  CounterFragment.newInstance(savedInstanceState));
         }
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         int i = item.getItemId();
         switch (i) {
             case android.R.id.home:
-                boolean shouldGoBack = getSupportFragmentManager().getBackStackEntryCount() >= 1;
+                boolean shouldGoBack = getSupportFragmentManager().getBackStackEntryCount() > 1;
                 if (shouldGoBack) {
                     //getSupportFragmentManager().popBackStack();
                     onBackPressed();
@@ -137,8 +137,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        boolean shouldGoBack = getSupportFragmentManager().getBackStackEntryCount() >= 1;
+        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+        boolean shouldGoBack = backStackCount > 1;
         if (shouldGoBack) {
+            mCurrentFragmentTag =
+                  getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1).getName();
             super.onBackPressed();
         }
     }
@@ -170,7 +173,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Adds th specified {@link RxBus} event subscriber to this activity  {@link CompositeSubscription}
+     * Adds th specified {@link RxBus} event subscriber to this activity  {@link
+     * CompositeSubscription}
+     *
      * @param subscriber {@link RxBus} event subscriber
      * @param filterFunction the {@link RxBus} event filter function
      */
@@ -256,10 +261,11 @@ public class MainActivity extends AppCompatActivity
             mToolbar.setTitle(R.string.main_toolbar_title);
             return;
         }
-        mToolbar.setNavigationIcon(stackSize >= 1 ? R.drawable.ic_arrow_back_white_24dp
-                                                  : R.drawable.ic_menu_white_24dp);
+        mToolbar.setNavigationIcon(stackSize > 1 ? R.drawable.ic_arrow_back_white_24dp
+                                                 : R.drawable.ic_menu_white_24dp);
         String fragmentTag =
               getSupportFragmentManager().getBackStackEntryAt(stackSize - 1).getName();
+        mCurrentFragmentTag = fragmentTag;
         BaseFragment fragment =
               (BaseFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (fragment != null) {
@@ -269,9 +275,9 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Add or replace a fragment to the activity container view, based on it's fragment save.
+     *
      * @param savedInstanceState the saved instance of this activity
      * @param fragment to be add or replace.
-     * @param <T>
      */
     private <T extends BaseFragment> void addOrReplaceFragment(@Nullable Bundle savedInstanceState,
           @NonNull T fragment) {
@@ -285,7 +291,7 @@ public class MainActivity extends AppCompatActivity
             Log.d("Restoring fragment", fragmentTag, " from savedState:", savedInstanceState);
             foundFragment = (T) getSupportFragmentManager().findFragmentByTag(fragmentTag);
         }
-        mMainBundle.putString(ARG_CURRENT_FRAGMENT_TAG, fragmentTag);
+        mCurrentFragmentTag = fragmentTag;
         if (foundFragment == null) {
             Log.d(String.format("Cannot find fragment with tag %s", fragmentTag));
             foundFragment = fragment;
@@ -307,7 +313,8 @@ public class MainActivity extends AppCompatActivity
         ft.commit();
     }
 
-    private void replaceFragment(int containerViewId, final BaseFragment fragment, String fragmentTag) {
+    private void replaceFragment(int containerViewId, final BaseFragment fragment,
+          String fragmentTag) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
                                                             .setTransition(
                                                                   FragmentTransaction
@@ -322,18 +329,22 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Returns if the specified fragment should be added to the back stack.
+     *
      * @param fragmentToAdd the new fragment to be added or not
      * @return true, if the previous backstack entry not the fragment to be added.
      */
     private boolean shouldAddToBackStack(final BaseFragment fragmentToAdd) {
         final String fragmentTagToAdd = ((BaseFragment) fragmentToAdd).getFragmentTag();
         final int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-        String previousFragmentTag = HomeFragment.TAG;
-        if (backStackCount >= 1) {
+        String previousFragmentTag = null;
+        if (backStackCount == 1) {
+            previousFragmentTag = getSupportFragmentManager().getBackStackEntryAt(0).getName();
+        }
+        if (backStackCount > 1) {
             previousFragmentTag =
                   getSupportFragmentManager().getBackStackEntryAt(backStackCount - 1).getName();
         }
-        return !previousFragmentTag.equals(fragmentTagToAdd);
+        return previousFragmentTag == null || !previousFragmentTag.equals(fragmentTagToAdd);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
