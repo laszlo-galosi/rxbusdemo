@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Application theme. -->
+  <style name="Theme.AppTheme"
+      parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+    <!-- Main theme colors -->
+    <!--   your mApplication branding color for the mApplication bar -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <!--   darker variant for the status bar and contextual mApplication bars -->
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <!-- Custom shadow overlay for toolbar shadow from Google I/O mApplication -->
+    <!--<item name="android:windowContentOverlay">@drawable/bottom_shadow</item>-->
+
+    <item name="android:editTextColor">@color/colorTextPrimary</item>
+    <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+    <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+  </style>
+</resources>

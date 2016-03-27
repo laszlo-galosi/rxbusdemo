@@ -1,0 +1,20 @@
+<resources>
+  <string name="app_name">CounterDemo</string>
+
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="nav_menu_gallery">Gallery</string>
+  <string name="nav_menu_counter">Counter</string>
+
+  <string name="action_settings">Settings</string>
+  <string name="my_name">László Gálosi</string>
+  <string name="my_email">laszlo.galosi78@gmail.com</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="snackbar_action_ok">Ok</string>
+  <string name="snack_internal_error">Internal error.</string>
+  <string name="main_toolbar_title">Home</string>
+  <string name="toolbar_title_counter">Counter</string>
+  <string name="nav_menu_home">Home</string>
+</resources>

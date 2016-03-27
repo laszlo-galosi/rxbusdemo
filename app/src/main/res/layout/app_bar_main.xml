@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.largerlife.counterdemo.MainActivity">
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <FrameLayout
+      android:id="@+id/content_main"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="0dp"
+      android:layout_marginBottom="0dp"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_below="@id/toolbar"
+  />
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab"
+      style="@style/MyFab"
+      android:layout_width="@dimen/design_fab_size_normal"
+      android:layout_height="@dimen/design_fab_size_normal"
+      android:layout_gravity="end|bottom"
+      android:src="@drawable/ic_play_white_24dp"
+      android:layout_marginBottom="@dimen/fab_margin"
+      android:layout_marginRight="@dimen/fab_margin"
+      app:background="@color/colorAccent"
+      app:borderWidth="0dp"
+      app:pressedTranslationZ="12dp"
+  />
+
+</android.support.design.widget.CoordinatorLayout>
