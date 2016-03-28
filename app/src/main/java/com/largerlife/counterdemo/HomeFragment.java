@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.largerlife.counterdemo.events.BundleWrapper;
@@ -29,6 +30,7 @@ public class HomeFragment extends BaseFragment {
     public static final String ARG_IMAGE_TO_LOAD = "ImageToLoad";
     public static final @DrawableRes int DEFAULT_STATIC_IMAGE = R.drawable.androiddev_meme;
     @Bind(R.id.imageView) ImageView mImageView;
+    @Bind(R.id.counterText) TextView mCounterView;
 
     /**
      * Use this factory method to create a new instance of
@@ -65,6 +67,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //Loading local image drawable with Picasso
         Picasso picasso = Picasso.with(getActivity());
         @DrawableRes int imageToLoadRes = DEFAULT_STATIC_IMAGE;
         if (savedInstanceState != null) {
@@ -72,11 +75,23 @@ public class HomeFragment extends BaseFragment {
         }
         picasso.setIndicatorsEnabled(true);
         picasso.load(imageToLoadRes)
-               .error(DEFAULT_STATIC_IMAGE)
-               .placeholder(R.mipmap.ic_launcher)
+               .error(R.drawable.counter_circle)
+               .placeholder(R.drawable.counter_circle)
                .centerInside()
                .resizeDimen(R.dimen.home_image_width, R.dimen.home_image_width)
                .into(mImageView);
+       /* Uncomment this if you want to download image from an url.
+        String urlString = "http://www.thewirelessguy.co
+        .uk/wp-content/uploads/2012/11/now-an-android-developer-meme.jpg";
+        Uri builtUri = Uri.parse(urlString).buildUpon().build();
+        mCounterView.setVisibility(View.VISIBLE);
+        new CountingImageDownloader(mCounterView, mImageView) {
+            @Override protected void onPostExecute(final Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                mCounterView.setVisibility(View.GONE);
+            }
+        }.execute(builtUri.toString());*/
+
     }
 
     @Override public void onResume() {

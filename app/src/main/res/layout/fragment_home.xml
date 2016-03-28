@@ -10,7 +10,18 @@
       android:layout_height="@dimen/home_image_width"
       android:layout_gravity="center"
       android:scaleType="centerInside"
-      android:src="@drawable/androiddev_meme"
+      android:src="@drawable/counter_circle"
+  />
+  <TextView
+      android:id="@+id/counterText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center|center_vertical"
+      android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark"
+      tools:text="12"
+      tools:visibility="visible"
+      android:visibility="gone"
   />
 
 </FrameLayout>
